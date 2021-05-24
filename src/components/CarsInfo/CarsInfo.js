@@ -3,23 +3,101 @@ import Container from '@material-ui/core/Container';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import yellow from '@material-ui/core/colors/yellow';
 import {createMuiTheme, makeStyles, ThemeProvider} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
 import {getCars, getCarsByRegion, getCarsByYear, getCarsByYearAndRegion} from "../../actions/carActions";
-import {Box, Grid, TableCell, TableRow, TextField, withStyles} from "@material-ui/core";
+import {Box, Grid, InputBase, TableCell, TableRow, TextField, withStyles} from "@material-ui/core";
 import {getRegions} from "../../actions/regionsActions";
+import {blue} from "@material-ui/core/colors";
 
 const theme = createMuiTheme({
     palette: {
         primary: {
             main: '#073b5b',
+            '&:focus': {
+                backgroundColor: "#073b5b",
+            }
         },
         secondary: {
             main: yellow['50'],
         },
+        action: {
+            focus: '#073b5b',
+
+        }
     },
+    "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+        border: "1px solid #484850",
+        borderRadius: "5px",
+        outline: "none"
+    },
+    overrides: {
+        Mui: {
+
+
+            '&$focused': {
+                backgroundColor: 'red',
+                "& .MuiOutlinedInput-notchedOutline":
+                    {
+                        backgroundColor: "blue",
+                        border: "1px solid #484850",
+                        borderRadius: "5px 5px 0 0"
+                    },
+
+            },
+
+            focused: {
+                "&.MuiOutlinedInput-notchedOutline":
+                    {
+                        backgroundColor: "blue"
+                    },
+                backgroundColor: yellow['50'],
+                '&$focus': {
+                    backgroundColor: 'red',
+                },
+            },
+        },
+        MuiSelect: {
+            select: {
+                // backgroundColor: yellow['50'],
+
+                "&:focus": {
+                    backgroundColor: yellow['50'],
+                    // "&:focus": {
+                    //     backgroundColor: yellow['100'],
+
+                    //
+                    // },
+                    "&$selected": {
+                        backgroundColor: "red",
+                        "&:hover": {
+                            backgroundColor: "green"
+                        }
+                    }
+                },
+                "&:not([multiple]) option": {
+                    backgroundColor: yellow['50'],
+                    "& li:hover": {
+                        backgroundColor: "#212039"
+                    },
+                    "&:hover": {
+                        backgroundColor: "white"
+                    }
+                },
+            },
+
+            MuiMenuItem: {
+                root: {
+                    fontSize: 12,
+                },
+            },
+
+        }
+    }
 });
+
 const useStyles = makeStyles((theme) => ({
         formControl: {
             margin: theme.spacing(1),
@@ -30,106 +108,139 @@ const useStyles = makeStyles((theme) => ({
         },
         grid: {
             display: "flex",
-            flexWrap: "nowrap",
+            flexDirection: 'column',
+            // flexWrap: "nowrap",
+            padding: "1px 0 0 1px",
+            boxSizing: "border-box",
+            boxShadow: "inset 0 0 0 1px #073b5b",
             justifyContent: 'flex-start'
         },
-        field: {
-            flex: "1 1 auto",
-            color: "black"
-            // width:'100px'
-        },
-        respTab: {
-            // display: 'flex',
-            borderRadius: '5px',
-            fontWeight: 'normal',
-            border: 'none',
-            borderCollapse: 'collapse',
-            width: '100%',
-            maxWidth: '100%',
-        },
-        respTabTd: {
-            padding: '10px 20px',
-            fontSize: '13px',
+        tableHeader: {
+            display: "flex",
+            // padding: '10px 2px',
+            fontSize: '10px',
             // border: none,
-            fontFamily: 'Verdana, sans-serif',
-            border: '1px solid #073b5b',
-            verticalAlign: 'top',
-            [theme.breakpoints.down('md')]: {
-                margin: '0 1px  1px  0',
-                paddingTop: '35px',
-                position: 'relative',
-                width: ' 50 %'
-            },
-            [theme.breakpoints.down('sm')]: {
-                width: ' 100 %'
-            }
-        },
-        respTabTh: {
-            padding: '10px 20px',
-            fontSize: '13px',
-            // border: none,
-            fontFamily: 'Verdana, sans-serif',
-            // border: '1px solid #337AB7',
+            // fontFamily: 'Verdana, sans-serif',
+            border: '1px solid #337AB7',
             verticalAlign: 'top',
             color: '#FFF',
             background: '#073b5b',
             fontWeight: 'bold',
-            border: '1px solid #1a4a73',
+            boxShadow: "inset 0 0 0 1px #001F32",
             textTransform: 'uppercase',
             textAlign: 'center',
+            [theme.breakpoints.down('xs')]: {
+                display: "none",
+            },
+
         },
-// respTaTr:nth-child(even) {
-//     background: #edf7ff;
-// }
-        respTabTdSpan: {
-            background: '#073b5b',
-            color: '#FFF',
-            display: 'none',
+        tableHeaderSpan: {
+            display: "none",
+            // flexDirection: 'row',
+            // padding: '10px 20px',
             fontSize: '11px',
+            // border: none,
+            // fontFamily: 'Verdana, sans-serif',
+            // border: '1px solid #337AB7',
+            verticalAlign: 'top',
+            textAlign: "center",
+            color: '#FFF',
+            background: '#073b5b',
             fontWeight: 'bold',
-            fontFamily: 'Verdana, sans-serif',
+            boxShadow: "inset 0 0 0 1px #FFF",
             textTransform: 'uppercase',
-            padding: '5px 10px',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            [theme.breakpoints.down('md')]: {
-                display: 'block',
+            [theme.breakpoints.down('xs')]: {
+                display: "flex",
+                alignItems: 'center',
+                justifyContent: 'center'
             }
         },
-        respTabThead: {
-            [theme.breakpoints.down('md')]: {
-                display: 'none',
+        row: {
+            display: "flex",
+            [theme.breakpoints.down('xs')]: {
+                flexDirection: 'column',
             }
         },
-        respTabTr: {
-            [theme.breakpoints.down('md')]: {
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                marginBottom: '30px',
+        headerField: {
+            flex: "1 1 50px",
+            border: "1px solid #FFF",
+            margin: "-1px 0 0 -1px",
+            boxSizing: "border-box",
+            borderCollapse: 'collapse',
+            padding: '10px 2px',
+            "&:nth-child(1)": {
+                minWidth: '40px',
+            },
+            "&:nth-child(2)": {
+                flexBasis: '200px',
+                minWidth: '150px'
+
+            },
+        },
+        field: {
+            display: "flex",
+            flex: "1 1 50px",
+            color: "black",
+            border: "1px solid #073b5b",
+            margin: "-1px 0 0 -1px",
+            padding: '2px',
+            boxSizing: "border-box",
+            borderCollapse: 'collapse',
+            textAlign: 'center',
+            "&:nth-child(1)": {
+                minWidth: '40px',
+            },
+            "&:nth-child(2)": {
+                background: "rgba(9, 59, 91, .15)",
+                flexBasis: '200px',
+                minWidth: '150px',
+                textAlign: 'left',
+                [theme.breakpoints.down('xs')]: {
+                    textAlign: 'center',
+                    flexBasis: '50px',
+                }
+            },
+            flexDirection: 'column',
+            [theme.breakpoints.down('xs')]: {
+                padding: '0',
             }
         },
+        boldText: {
+            fontWeight: "bold",
+        },
+        dropdownStyle: {
+            backgroundColor: "red"
+        },
+        legend: {
+            fontWeight:'bold',
+            fontSize:12,
+            listStyle: "inside",
+            [theme.breakpoints.down('xs')]: {
+                display: "none",
+            }
+        },
+        legendItem: {
+            margin: '2px auto',
+            fontWeight:'normal',
+        },
+        rootMenuItem: {
+            "&$selected": {
+                backgroundColor: "red",
+                "&:hover": {
+                    backgroundColor: "green"
+                }
+            },
+            '&:hover': {
+                backgroundColor: 'blue'
+            }
+        }
+        // select:{
+        //
+        // }
     }))
 ;
-
-const StyledTableCell = withStyles((theme) => ({
-    head: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-    },
-    body: {
-        fontSize: 14,
-    },
-}))(TableCell);
-
-const StyledTableRow = withStyles((theme) => ({
-    root: {
-        '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.action.hover,
-        },
-    },
-}))(TableRow);
+const tableHeader = ["РІК", "РЕГІОН", "ЛЕГКОВИЙ", "ВАНТАЖНИЙ", "АВТОБУС", "ПРИЧІП", "НАПІВПРИЧІП", "МОТОЦИКЛ", "МОПЕД", "ТРИЦИКЛ", "КВАДРОЦИКЛ", "ТРОЛЕЙБУС", "ТРАМВАЙ", "МОТОПРИЧІП"]
+const tableHeaderShort = ["Рік", "Регіон", "л-й", "в-й", "а-с", "п-п", "н-п", "м-л", "м-д", "т-л", "к-л", "т-с", "т-й", "м-п"]
 
 export default function CarsInfo() {
     const classes = useStyles();
@@ -192,36 +303,6 @@ export default function CarsInfo() {
             if (prevRegion != region) setPrevRegion(region);
         }
 
-        // if (year == 1 && prevYear != year || region == 1 && prevRegion != region) {
-        //     console.log('year', year);
-        //     console.log('region', region);
-        //     console.log('prevYear', prevYear);
-        //     console.log('prevRegion', prevRegion);
-        //     if (prevRegion != region) {
-        //         console.log('оилрдлд');
-        //         dispatch(getCarsByRegion({
-        //             'region': region
-        //         }))
-        //     }
-        //     if (prevYear != year) {
-        //         dispatch(getCarsByYear({
-        //             'year': year,
-        //         }))
-        //     }
-        //
-        //     if (prevYear != year) setPrevYear(year);
-        //     if (prevRegion != region) setPrevRegion(region);
-        // }
-        // if (year == 1 && region == 1 &&  prevYear != year || prevRegion != region) {
-        //     console.log('year', year);
-        //     console.log('region', region);
-        //     console.log('prevYear', prevYear);
-        //     console.log('prevRegion', prevRegion);
-        //     dispatch(getCars())
-        //     if (prevYear != year) setPrevYear(year);
-        //     if (prevRegion != region) setPrevRegion(region);
-        // }
-
     }, [pendingCars, pendingCarsByYear, pendingRegions, pendingCarsByYearAndRegion, cars, regions, dispatch, prevYear, year, region, prevRegion])
 
 
@@ -239,11 +320,13 @@ export default function CarsInfo() {
                             name: 'year',
                             id: 'outlined-age-native-simple',
                         }}
+                        MenuProps={{classes: {option: classes.dropdownStyle}}}
                     >
                         {years.map((item, index) =>
-                            <option key={item[index]} value={item}>{item}</option>
+                            <option key={item[index]} value={item}
+                                    className={classes.rootMenuItem}>{item}</option>
                         )}
-                        <option value={1}>{yearFrom}-{yearTo}</option>
+                        <option value={1} className={classes.boldText}>{yearFrom}-{yearTo}</option>
                     </Select>
                 </FormControl>
                 <FormControl variant="outlined" className={classes.formControl}>
@@ -253,6 +336,7 @@ export default function CarsInfo() {
                         value={region}
                         onChange={changeRegion}
                         label="Регіон"
+                        className={classes.select}
                         inputProps={{
                             name: 'region',
                             id: 'outlined-age-native-simple',
@@ -261,43 +345,53 @@ export default function CarsInfo() {
                         {regions && regions.map((item, index) =>
                             <option key={regions[index]} value={item}>{item}</option>
                         )}
-                        <option value={1}>Всі регіони</option>
+                        <option value={1} className={classes.boldText}>ВCІ РЕГІОНИ</option>
                     </Select>
                 </FormControl>
                 <div className={classes.grid}>
+
+                    <div className={classes.tableHeader}>
+                        {tableHeaderShort.map((item, index) =>
+                            <div className={classes.headerField} key={tableHeader[index]}>
+                                {item}
+                            </div>)}
+                    </div>
                     {cars && cars.metaData !== undefined && cars.rows.map((item, index) =>
-                        <div className={classes.row}>
-                           {cars.rows.map((itemRow, indexRow) =>
-                                // <Box item key={cars[index]} className={classes.root}>
-                                <div className={classes.field}>
-                                    {cars.rows != undefined && cars.rows[indexRow] != undefined ? cars.rows[index][indexRow] : null}
-                                </div>
-                            )
-
-                            }</div>
-)}
+                        <>
+                            {/*<div className={classes.tableHeader}>*/}
+                            {/*    {tableHeader.map((item, index) =>*/}
+                            {/*        <div className={classes.headerField} key={tableHeader[index]}>*/}
+                            {/*            {item}*/}
+                            {/*        </div>)}*/}
+                            {/*</div>*/}
+                            <div className={classes.row}>
+                                {cars.metaData.map((itemRow, indexRow) =>
+                                    // <Box item key={cars[index]} className={classes.root}>
+                                    <div className={classes.field}>
+                                        <span className={classes.tableHeaderSpan}>
+                                            {tableHeader[indexRow]}
+                                        </span>
+                                        {cars.rows[index] != undefined ? cars.rows[index][indexRow] : null}
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    )}
                 </div>
-
-                <table className={classes.respTab}>
-                    <thead className={classes.respTabThead}>
-                    <tr>
-                        {cars && cars.metaData !== undefined && cars.metaData.map((item, index) =>
-                            <th className={classes.respTabTh} key={cars[index]}>
-                                {item.name}
-                            </th>)}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {cars && cars.metaData !== undefined && cars.rows !== undefined && cars.rows.map((item, index) =>
-                        <tr>{cars.metaData.map((itemRow, indexRow) =>
-                            <td className={classes.respTabTd}>
-                                <span className={classes.respTabTdSpan}
-                                      value={item.name}>{cars.metaData[indexRow].name}</span>
-                                {cars.rows[index] != undefined ? cars.rows[index][indexRow] : null}
-                            </td>)}
-                        </tr>)}
-                    </tbody>
-                </table>
+                <ul className={classes.legend}>Умовні позначення:
+                    <li className={classes.legendItem}>л-й - легковий;</li>
+                    <li className={classes.legendItem}>в-й - вантажний;</li>
+                    <li className={classes.legendItem}>а-с - автобус;</li>
+                    <li className={classes.legendItem}>п-п - причіп;</li>
+                    <li className={classes.legendItem}>н-п - напівпричіп;</li>
+                    <li className={classes.legendItem}>м-л - мотоцикл;</li>
+                    <li className={classes.legendItem}>м-д - мопед;</li>
+                    <li className={classes.legendItem}>т-л - трицикл;</li>
+                    <li className={classes.legendItem}>к-л - квадроцикл;</li>
+                    <li className={classes.legendItem}>т-с - тролейбус;</li>
+                    <li className={classes.legendItem}>т-й - трамвай;</li>
+                    <li className={classes.legendItem}>м-п - мотопричіп;</li>
+                </ul>
             </ThemeProvider>
         </Container>
     )

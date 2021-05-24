@@ -66,6 +66,8 @@ async function getCarsByRegion(region) {
 }
 
 async function getCarsByYearAndRegion(year, region) {
+    // console.log('year', year)
+    // console.log('region', region)
     if (year == 1 && region == 1) {
         return getCars()
     }
