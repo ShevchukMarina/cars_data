@@ -78,11 +78,10 @@ export default function Header() {
 
     return (
         <div title="Головна сторінка" className={classes.root}>
-            <div className={classes.containerImg}>
+            <div>
                 <img src="/static/img/trezub.png" className={classes.img} alt="Головна сторінка"/>
             </div>
-            <h2 className={classes.header}>Дані щодо кількоті зареєстрованих машин</h2>
-            {/*<p className={classes.subheader}>Робоче місце оператора call-центру</p>*/}
+            <h2 className={classes.header}>Дані щодо кількоcті зареєстрованих машин</h2>
         </div>
     )
 }

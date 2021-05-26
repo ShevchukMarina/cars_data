@@ -3,14 +3,12 @@ import Container from '@material-ui/core/Container';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import yellow from '@material-ui/core/colors/yellow';
 import {createMuiTheme, makeStyles, ThemeProvider} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
-import {getCars, getCarsByRegion, getCarsByYear, getCarsByYearAndRegion} from "../../actions/carActions";
-import {Box, Grid, InputBase, TableCell, TableRow, TextField, withStyles} from "@material-ui/core";
+import {getCars, getCarsByYearAndRegion} from "../../actions/carActions";
 import {getRegions} from "../../actions/regionsActions";
-import {blue} from "@material-ui/core/colors";
+
 
 const theme = createMuiTheme({
     palette: {
@@ -35,65 +33,11 @@ const theme = createMuiTheme({
     },
     overrides: {
         Mui: {
-
-
-            '&$focused': {
-                backgroundColor: 'red',
-                "& .MuiOutlinedInput-notchedOutline":
-                    {
-                        backgroundColor: "blue",
-                        border: "1px solid #484850",
-                        borderRadius: "5px 5px 0 0"
-                    },
-
-            },
-
-            focused: {
-                "&.MuiOutlinedInput-notchedOutline":
-                    {
-                        backgroundColor: "blue"
-                    },
-                backgroundColor: yellow['50'],
-                '&$focus': {
-                    backgroundColor: 'red',
-                },
-            },
-        },
-        MuiSelect: {
-            select: {
-                // backgroundColor: yellow['50'],
-
-                "&:focus": {
-                    backgroundColor: yellow['50'],
-                    // "&:focus": {
-                    //     backgroundColor: yellow['100'],
-
-                    //
-                    // },
-                    "&$selected": {
-                        backgroundColor: "red",
-                        "&:hover": {
-                            backgroundColor: "green"
-                        }
-                    }
-                },
-                "&:not([multiple]) option": {
-                    backgroundColor: yellow['50'],
-                    "& li:hover": {
-                        backgroundColor: "#212039"
-                    },
-                    "&:hover": {
-                        backgroundColor: "white"
-                    }
-                },
-            },
-
             MuiMenuItem: {
                 root: {
                     fontSize: 12,
                 },
             },
-
         }
     }
 });
@@ -109,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
         grid: {
             display: "flex",
             flexDirection: 'column',
-            // flexWrap: "nowrap",
             padding: "1px 0 0 1px",
             boxSizing: "border-box",
             boxShadow: "inset 0 0 0 1px #073b5b",
@@ -117,10 +60,7 @@ const useStyles = makeStyles((theme) => ({
         },
         tableHeader: {
             display: "flex",
-            // padding: '10px 2px',
             fontSize: '10px',
-            // border: none,
-            // fontFamily: 'Verdana, sans-serif',
             border: '1px solid #337AB7',
             verticalAlign: 'top',
             color: '#FFF',
@@ -136,12 +76,7 @@ const useStyles = makeStyles((theme) => ({
         },
         tableHeaderSpan: {
             display: "none",
-            // flexDirection: 'row',
-            // padding: '10px 20px',
             fontSize: '11px',
-            // border: none,
-            // fontFamily: 'Verdana, sans-serif',
-            // border: '1px solid #337AB7',
             verticalAlign: 'top',
             textAlign: "center",
             color: '#FFF',
@@ -212,8 +147,8 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: "red"
         },
         legend: {
-            fontWeight:'bold',
-            fontSize:12,
+            fontWeight: 'bold',
+            fontSize: 12,
             listStyle: "inside",
             [theme.breakpoints.down('xs')]: {
                 display: "none",
@@ -221,7 +156,7 @@ const useStyles = makeStyles((theme) => ({
         },
         legendItem: {
             margin: '2px auto',
-            fontWeight:'normal',
+            fontWeight: 'normal',
         },
         rootMenuItem: {
             "&$selected": {
@@ -234,9 +169,6 @@ const useStyles = makeStyles((theme) => ({
                 backgroundColor: 'blue'
             }
         }
-        // select:{
-        //
-        // }
     }))
 ;
 const tableHeader = ["РІК", "РЕГІОН", "ЛЕГКОВИЙ", "ВАНТАЖНИЙ", "АВТОБУС", "ПРИЧІП", "НАПІВПРИЧІП", "МОТОЦИКЛ", "МОПЕД", "ТРИЦИКЛ", "КВАДРОЦИКЛ", "ТРОЛЕЙБУС", "ТРАМВАЙ", "МОТОПРИЧІП"]
@@ -249,8 +181,6 @@ export default function CarsInfo() {
     const [prevYear, setPrevYear] = useState(year);
     const [region, setRegion] = useState('1');
     const [prevRegion, setPrevRegion] = useState(region);
-    // console.log('year', year);
-    // console.log('prevYear', prevYear);
     const yearFrom = 2013;
     const yearTo = 2020;
 
@@ -279,7 +209,6 @@ export default function CarsInfo() {
         regions: state.regions.regions
     }))
     const changeCarsByYear = (e) => {
-        // console.log(event.target.value);
         setYear(e.target.value)
     };
     const changeRegion = (e) => {
@@ -290,7 +219,6 @@ export default function CarsInfo() {
             dispatch(getCars());
             dispatch(getRegions())
         }
-        // if (year != 1 && region != 1 && prevYear != year || year != 1 && region != 1 && prevRegion != region) {
         if (prevYear != year || prevRegion != region) {
             console.log('year', year);
             console.log('region', region);
@@ -358,15 +286,8 @@ export default function CarsInfo() {
                     </div>
                     {cars && cars.metaData !== undefined && cars.rows.map((item, index) =>
                         <>
-                            {/*<div className={classes.tableHeader}>*/}
-                            {/*    {tableHeader.map((item, index) =>*/}
-                            {/*        <div className={classes.headerField} key={tableHeader[index]}>*/}
-                            {/*            {item}*/}
-                            {/*        </div>)}*/}
-                            {/*</div>*/}
                             <div className={classes.row}>
                                 {cars.metaData.map((itemRow, indexRow) =>
-                                    // <Box item key={cars[index]} className={classes.root}>
                                     <div className={classes.field}>
                                         <span className={classes.tableHeaderSpan}>
                                             {tableHeader[indexRow]}

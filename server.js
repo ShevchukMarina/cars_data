@@ -1,5 +1,4 @@
 const express = require('express');
-// const axios = require('axios');
 const oracledb = require('oracledb');
 const dbConfig = require('./dbconfig.js');
 const app = express();
@@ -8,10 +7,8 @@ let regions;
 
 async function run(statement, binds = [], opts = {}) {
     let connection;
-
     try {
-        let sql, binds, options, result;
-
+        let result;
         connection = await oracledb.getConnection(
             {
                 user: 'test',
@@ -20,8 +17,6 @@ async function run(statement, binds = [], opts = {}) {
             }
         )
         result = await connection.execute(statement);
-
-        // console.log(result.rows)
         console.log('Connection was successful!');
         return result
     } catch (e) {
@@ -66,8 +61,6 @@ async function getCarsByRegion(region) {
 }
 
 async function getCarsByYearAndRegion(year, region) {
-    // console.log('year', year)
-    // console.log('region', region)
     if (year == 1 && region == 1) {
         return getCars()
     }
